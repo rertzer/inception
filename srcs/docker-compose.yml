@@ -1,0 +1,45 @@
+version: "2.18.1"
+
+services:
+  nginx:
+    container_name: nginx
+    image: nginx
+    volumes:
+      - wordpress:/var/www/html/wordpress
+    networks:
+      - inception
+    env_file:
+      - .env
+    build:
+      context: ./requirements/nginx/
+      args:
+        DOMAIN_NAME: ${DOMAIN_NAME}
+        CERT_UID: ${CERT_UID}
+        TOTOR: rototo
+    ports:
+      - "443:443"
+    restart: on-failure
+
+  mariadb:
+    container_name: mariadb
+    image: mariadb
+    build: ./requirements/mariadb/
+    env_file: .env
+    networks:
+      - inception
+    expose:
+      - "3306"
+    restart: on-failure
+
+volumes:
+  wordpress:
+    name: wordpress
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: bind
+      device: "${VOLUMES_PATH}/wordpress"
+
+networks:
+  inception:
+    driver: bridge

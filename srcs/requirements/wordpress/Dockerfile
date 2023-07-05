@@ -1,0 +1,12 @@
+FROM debian:bullseye
+
+RUN apt-get update && apt-get upgrade && apt-get install php7.4 php-fpm php-mysql -y
+
+RUN wget https://wordpress.org/wordpress-6.2.2.tar.gz -P /var/www
+RUN cd /var/www && tar -xzf wordpress-6.2.2.tar.gz && rm wordpress-6.2.2.tar.gz
+
+COPY conf/www.conf /etc/php/7.4/fpm/pool.d
+
+RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+RUN chmod +x wp-cli.phar
+RUN mv wp-cli.phar /usr/local/bin/wp
