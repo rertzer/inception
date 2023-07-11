@@ -34,4 +34,4 @@ then
 	#cp wp-config-sample.php wp-config.php	
 fi
 echo "starting php-fpm\n"
-/usr/sbin/php-fpm7.4 -F
+exec /usr/sbin/php-fpm7.4 -F

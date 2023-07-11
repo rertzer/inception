@@ -16,4 +16,4 @@ else
 	sleep 5
 fi
 
-mysqld_safe
+exec mysqld_safe
