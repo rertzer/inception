@@ -1,14 +1,37 @@
 #!/bin/sh
 
-if [ ! -f /var/www/html/wordpress/wp-config.php ]
+echo "before sleep\n"
+#export PATH=$PATH:/usr/local/mysql/bin
+pwd
+sleep 10
+echo "after sleep\n"
+
+if [ ! -f wp-config.php ]
 then
-	wp config create \
-		--allow-root \
+	echo "Wordpress configuration\n"
+	#echo "step 1"
+	#wp core download --allow-root --path="/var/www/html/wordpress"
+
+	echo "step 2"
+	wp core config \
+		--dbhost=mariadb:3306 \
 		--dbname=$SQL_DATABASE \
 		--dbuser=$SQL_USER \
 		--dbpass=$SQL_PSSWD \
-		--dbhost=mariadb:3306 \
-		--path=/var/www/html/wordpress
+		--allow-root
+	wp core install \
+		--title=$WP_TITLE \
+		--admin_user=$WP_USERNAME \
+		--admin_password=$WP_PASSWD \
+		--admin_email=$WP_EMAIL \
+		--url=$WP_URL \
+		--allow-root
+	#cd /wordpress
+	#sed -i "s/username_here/$SQL_USER/g" wp-config-sample.php
+	#sed -i "s/password_here/$SQL_PSSWD/g" wp-config-sample.php
+	#sed -i "s/localhost/mariadb/g" wp-config-sample.php
+	#sed -i "s/database_name_here/$SQL_DATABASE/g" wp-config-sample.php
+	#cp wp-config-sample.php wp-config.php	
 fi
-
-/usr/sbin/php-fpm8.2 -F -R
+echo "starting php-fpm\n"
+/usr/sbin/php-fpm7.4 -F
