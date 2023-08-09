@@ -32,6 +32,7 @@ services:
       - inception
     depends_on:
       - mariadb
+      - redis
     expose:
       - "9000"
     restart: on-failure
@@ -47,6 +48,45 @@ services:
       - inception
     expose:
       - "3306"
+    restart: on-failure
+
+  adminer:
+    container_name: adminer
+    image: adminer
+    build: ./requirements/adminer/
+    depends_on:
+      - mariadb
+    networks:
+      - inception
+    ports:
+      - "80:80"
+    restart: on-failure
+
+  redis:
+    container_name: redis
+    image: redis
+    build: ./requirements/redis/
+    networks:
+      - inception
+    expose:
+      - "6379"
+    restart: on-failure
+
+  ftp:
+    container_name: ftp
+    image: ftp
+    build:
+      context: ./requirements/ftp/
+      args:
+        FTP_USER: ${FTP_USER}
+        FTP_PSSWD: ${FTP_PSSWD}
+    volumes:
+      - wordpress:/var/www/html/wordpress
+    networks:
+      - inception
+    ports:
+      - "2020:20"
+      - "2121:21"
     restart: on-failure
 
 volumes:

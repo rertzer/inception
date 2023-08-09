@@ -17,5 +17,10 @@ RUN mkdir -p /var/www/html/wordpress
 RUN chmod 755 /var/www/html/wordpress
 RUN chown -R www-data:www-data /var/www/html/wordpress
 
+RUN mkdir -p /var/www/html/adminer
+RUN chmod 755 /var/www/html/adminer
+RUN chown -R www-data:www-data /var/www/html/adminer
+RUN touch /var/www/html/adminer/adminer.php
+
 EXPOSE 443
 ENTRYPOINT ["nginx", "-g", "daemon off;"]
