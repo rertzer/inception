@@ -15,6 +15,11 @@ services:
     build:
       context: ./requirements/nginx/
       args:
+        COUNTRY: ${COUNTRY}
+        STATE: ${STATE}
+        CITY: ${CITY}
+        ORG: ${ORG}
+        ORG_UNIT: ${ORG_UNIT}
         DOMAIN_NAME: ${DOMAIN_NAME}
         CERT_UID: ${CERT_UID}
     ports:
@@ -59,7 +64,7 @@ services:
     networks:
       - inception
     ports:
-      - "80:80"
+      - "8080:80"
     restart: on-failure
 
   redis:
@@ -85,8 +90,11 @@ services:
     networks:
       - inception
     ports:
-      - "2020:20"
-      - "2121:21"
+      - "20:20"
+      - "21:21"
+      - "42100-42105:42100-42105" 
+    env_file:
+      - .env
     restart: on-failure
 
 volumes:

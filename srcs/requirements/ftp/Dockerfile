@@ -15,18 +15,19 @@ RUN adduser \
 	--disabled-password \
 	--home /var/www/html/wordpress \
 	--no-create-home \
-	--disabled-login \
-	--shell /usr/sbin/nologin \
 	$FTP_USER
 
 RUN echo "$FTP_USER:$FTP_PSSWD" | /usr/sbin/chpasswd
 
 RUN chown -R $FTP_USER:$FTP_USER /var/www/html/wordpress
 
-RUN echo $FTP_USR | tee -a /etc/vsftpd.userlist
+RUN echo $FTP_USER | tee -a /etc/vsftpd.userlist
 
 COPY ./conf/vsftpd.conf /etc/vsftpd/
+COPY ./scripts/init.sh /etc/vsftpd/
 
-ENTRYPOINT ["/usr/sbin/vsftpd", "/etc/vsftpd/vsftpd.conf"]
+STOPSIGNAL SIGKILL
+
+ENTRYPOINT ["sh", "/etc/vsftpd/init.sh"]
 	
 
