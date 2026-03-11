@@ -5,6 +5,7 @@ This project consists of having set up a small infrastructure composed of differ
 - A Docker container that contains WordPress + php-fpm.
 - A Docker container that contains MariaDB.
 - A Docker container that contains a Redis cache for the WordPress website.
+- A Docker container that contains an FTP server pointing to the volume of the WordPress website.
 - A Docker container that contains Adminer.
 - A volume that contains the WordPress database.
 - A second volume that contains the WordPress website files.
