@@ -8,3 +8,4 @@ This project consists of having set up a small infrastructure composed of differ
 - A Docker container that contains Adminer.
 - A volume that contains your WordPress database.
 - A second volume that contains the WordPress website files.
+- A docker-network that establishes the connection between the containers.
