@@ -2,8 +2,6 @@
 if [ -d "/var/lib/mysql/${SQL_DATABASE}" ]
 then
 	echo "${SQL_DATABASE} already exists\n"
-	#sleep 2
-	#mysqladmin -u root -p${SQL_ROOT_PSSWD} shutdown
 	sleep 5
 else
 	service mariadb start
