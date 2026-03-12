@@ -168,7 +168,7 @@ The project follows a microservices architecture where each service runs in its 
 ### Adminer (Database Management Tool)
 
 - **Container**: `adminer`
-- **External Port**: 8080
+- **External Port**: 80
 - **Purpose**: Web-based database administration interface. Browse, query and manage MariaDB database
 
 #### Features and Configuration (`000-default.conf`, `www.conf`)
