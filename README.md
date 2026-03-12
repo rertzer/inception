@@ -77,6 +77,8 @@ All services use `.env` file for credentials and configuration
 
 The project follows a microservices architecture where each service runs in its own Docker container and communicates through a custom Docker network. The system is managed through `docker-compose` for easy orchestration and deployment.
 
+![Inception Diagram](inception_schema.pdf)
+
 ### NGINX (Web Server)
 
 - **Container**: `nginx`
