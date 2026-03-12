@@ -28,7 +28,7 @@ Inception is a comprehensive Docker-based infrastructure project that sets up a 
 3. Run `make up` to start the infrastructure
 4. Access services:
    - WordPress: `https://localhost` (HTTPS only)
-   - Adminer: `http://localhost:8080`
+   - Adminer: `http://localhost:80`
    - FTP: `localhost:21`
 
 ## Credentials
