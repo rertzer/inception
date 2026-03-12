@@ -24,14 +24,14 @@ Inception is a comprehensive Docker-based infrastructure project that sets up a 
 ### Setup Steps
 
 1. Create `.env` file in the `srcs/` directory with all required variables
-2. Run make build to create volumes and build images
-3. Run make up to start the infrastructure
+2. Run `make build` to create volumes and build images
+3. Run `make up` to start the infrastructure
 4. Access services:
    - WordPress: `https://localhost` (HTTPS only)
    - Adminer: `http://localhost:8080`
    - FTP: `localhost:21`
 
-## Credentials:
+## Credentials
 
 All services use `.env` file for credentials and configuration
 
@@ -77,51 +77,49 @@ All services use `.env` file for credentials and configuration
 
 The project follows a microservices architecture where each service runs in its own Docker container and communicates through a custom Docker network. The system is managed through `docker-compose` for easy orchestration and deployment.
 
-### Service Topology
-
-## NGINX (Web Server)
+### NGINX (Web Server)
 
 - **Container**: `nginx`
 - **Port**: 443
 - **Purpose**: Reverse proxy and web server
 
-### Features:
+#### Features:
 
 - **TLS/SSL Encryption:** Enforces TLSv1.2 and TLSv1.3 only for maximum security
 - **Self-Signed Certificates:** Generated during container build with customizable certificate information (country, state, city, organization, etc.)
 - **Reverse Proxy:** Routes PHP requests to the WordPress PHP-FPM container
 - **Static File Serving:** Serves WordPress files and static assets
 
-### Configuration (`nginx.conf`)
+#### Configuration (`nginx.conf`)
 
 - Listens on port 443 for both IPv4 and IPV6
 - Routes HTTP requests to `/var/www/html/vordpress`
 - Forwards `.php` requests to the WordPress PHP-FPM container via `fastcgi_pass`
 - Uses named DNS resolution to communicate with containers
 
-## WordPress + PHP-FPM (Application Server)
+### WordPress + PHP-FPM (Application Server)
 
 - **Container**: `wordpress`
 - **Internal Port**: 9000 (PHP-FPM FastCGI)
 - **Purpose**: WordPress CMS with PHP application execution
 
-### Features:
+#### Features:
 
 - **WordPress 6.2.2**: Latest stable version automatically downloaded and extracted
-- **PHP-FPM** 7.4\*\*: Runs as Fast CGI Process Manager for optimal performance
+- **PHP-FPM 7.4**: Runs as Fast CGI Process Manager for optimal performance
 - **WP-CLI**: Command-line tool for WordPress Management
 - **Redis Integration**: Automatically configured for caching
 - **Dynamic Process Manager**: Scales PHP processes based on demand
 
-### Configuration (`www.conf`):
+#### Configuration (`www.conf`):
 
 - Listen on all interfaces on port 9000
 - Dynamic process manager
   - Maximum 5 concurrent PHP processes
   - 2 Initial processes
-  - Between 1 and 3 idle porcesses
+  - Between 1 and 3 idle processes
 
-### Initialization Process (`wp_conf.sh`):
+#### Initialization Process (`wp_conf.sh`):
 
 1. Waits 20 seconds for MariaDB to start (graceful startup delay)
 2. Generates `wp-config.php` with database credentials
@@ -133,52 +131,52 @@ The project follows a microservices architecture where each service runs in its 
 5. Updates all plugins
 6. Starts PHP-FPM in foreground mode
 
-## MariaDB (Database Server)
+### MariaDB (Database Server)
 
 - **Container**: `mariadb`
 - **Internal Port**: 3306
 - **Purpose**: Relational database for WordPress
 
-### Features
+#### Features
 
 - **Persitent Storage**: Data survives container restarts via volume mount
 - **Automated Initialization**: Creates database and users on first run
 
-### Initialization Porcess (`init_mariadb.sh`)
+#### Initialization Process (`init_mariadb.sh`)
 
-- Creates the database if not exists
-- Creates the users and sets their password according to the environment variable
+- Creates the database if it don't exists
+- Creates the users and sets their passwords according to the environment variable
 - Grants users privileges
-- Root access is restricted to localhost
+- Root access is restricted to `localhost`
 - Restart the database
 
-## Redis (Cache Layer)
+### Redis (Cache Layer)
 
 - **Container**: `redis`
 - **Internal Port**: 6379
 - **Purpose**: In-memory caching for WordPress
 
-### Features and Configuration (``)
+#### Features and Configuration (`Dockerfile`)
 
 - **Memory Limit**: 128 MB maximum memory usage
 - **Eviction Policy**: Last Recently Used (LRU)
 - **Network Mode**: Accessible only from containers in the `inception` network
 - **Protected Mode**: Disabled to allow container-to-container communication
 
-## Adminer (Database Management Tool)
+### Adminer (Database Management Tool)
 
 - **Container**: `adminer`
 - **External Port**: 8080
 - **Purpose**: Web-based database administration interface. Browse, query and manage MariaDB database
 
-### Features and Configuration (`000-default.conf`, `www.conf`)
+#### Features and Configuration (`000-default.conf`, `www.conf`)
 
 - **Apache Web Server**: Runs on port 8080
 - **Access**: `http://localhost:8080` (HTTP only)
 - Automatically connects to MariaDB container
 - Enables viewing of WorPress database structure and content
 
-## vsftpd (FTP Server)
+### vsftpd (FTP Server)
 
 - **Container**: `ftp`
 - **External Ports**:
@@ -187,7 +185,7 @@ The project follows a microservices architecture where each service runs in its 
   - 42100-42105: passive mode data transfer
 - **Purpose**: File transfer to WordPress files
 
-### Features and Configuration (`vsftpd.conf`)
+#### Features and Configuration (`vsftpd.conf`)
 
 - **Secure Access**:
   - User authentication required
@@ -196,7 +194,7 @@ The project follows a microservices architecture where each service runs in its 
 - **WordPress Directory**: Access restricted to `/var/www/html/wordpress`
 - **Passive Mode**: Configured for firewall-friendly passive mode transfers
 
-### Initialization (Dockerfile and `init.sh`)
+#### Initialization (Dockerfile and `init.sh`)
 
 - Create user `FTP_USER` and sets it's password
 - Add user and group `FTP_USER` to `vsftpd` userlist
@@ -206,8 +204,8 @@ The project follows a microservices architecture where each service runs in its 
 
 ### Startup Sequence
 
-1. Docker Daemon receives docker-compose up command
-2. Volume Creation: Bind mounts created at ${VOLUMES_PATH}/wordpress and ${VOLUMES_PATH}/mariadb
+1. Docker Daemon receives `docker-compose up` command
+2. Volume Creation: Bind mounts created at `${VOLUMES_PATH}/wordpress` and `${VOLUMES_PATH}/mariadb`
 3. Network Creation: Custom bridge network named inception created for inter-container communication
 4. Container Startup Order:
    1. MariaDB starts first (no dependencies)
@@ -222,9 +220,9 @@ The project follows a microservices architecture where each service runs in its 
 
 ### Data Persistence
 
-- WordPress Files: Stored on `${VOLUMES_PATH}/wordpress` volume, mounted to all containers needing access
-- Database Files: Stored on `${VOLUMES_PATH}/mariadb` volume, survives container restarts
-- Container Removal: Data volumes remain; infrastructure can be rebuilt without data loss
+- **WordPress Files**: Stored on `${VOLUMES_PATH}/wordpress` volume, mounted to all containers needing access
+- **Database Files**: Stored on `${VOLUMES_PATH}/mariadb` volume, survives container restarts
+- **Container Removal**: Data volumes remain; infrastructure can be rebuilt without data loss
 
 ### Network Communication
 
