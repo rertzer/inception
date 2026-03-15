@@ -1,6 +1,6 @@
 FROM debian:bullseye
 
-RUN apt-get update && apt-get upgrade && apt-get install vsftpd -y
+RUN apt-get update && apt-get upgrade  -y && apt-get install vsftpd -y
 
 
 ARG FTP_USER

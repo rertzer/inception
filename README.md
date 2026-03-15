@@ -28,7 +28,7 @@ Inception is a comprehensive Docker-based infrastructure project that sets up a 
 3. Run `make up` to start the infrastructure
 4. Access services:
    - WordPress: `https://localhost` (HTTPS only)
-   - Adminer: `http://localhost:80`
+   - Adminer: `http://localhost:8080` (use `inc_mariadb` as server)
    - FTP: `localhost:21`
 
 ## Credentials
@@ -81,7 +81,7 @@ The project follows a microservices architecture where each service runs in its 
 
 ### NGINX (Web Server)
 
-- **Container**: `nginx`
+- **Container**: `inc_nginx`
 - **Port**: 443
 - **Purpose**: Reverse proxy and web server
 
@@ -101,7 +101,7 @@ The project follows a microservices architecture where each service runs in its 
 
 ### WordPress + PHP-FPM (Application Server)
 
-- **Container**: `wordpress`
+- **Container**: `inc_wordpress`
 - **Internal Port**: 9000 (PHP-FPM FastCGI)
 - **Purpose**: WordPress CMS with PHP application execution
 
@@ -135,7 +135,7 @@ The project follows a microservices architecture where each service runs in its 
 
 ### MariaDB (Database Server)
 
-- **Container**: `mariadb`
+- **Container**: `inc_mariadb`
 - **Internal Port**: 3306
 - **Purpose**: Relational database for WordPress
 
@@ -154,7 +154,7 @@ The project follows a microservices architecture where each service runs in its 
 
 ### Redis (Cache Layer)
 
-- **Container**: `redis`
+- **Container**: `inc_redis`
 - **Internal Port**: 6379
 - **Purpose**: In-memory caching for WordPress
 
@@ -167,8 +167,8 @@ The project follows a microservices architecture where each service runs in its 
 
 ### Adminer (Database Management Tool)
 
-- **Container**: `adminer`
-- **External Port**: 80
+- **Container**: `inc_adminer`
+- **External Port**: 8080
 - **Purpose**: Web-based database administration interface. Browse, query and manage MariaDB database
 
 #### Features and Configuration (`000-default.conf`, `www.conf`)
@@ -180,7 +180,7 @@ The project follows a microservices architecture where each service runs in its 
 
 ### vsftpd (FTP Server)
 
-- **Container**: `ftp`
+- **Container**: `inc_ftp`
 - **External Ports**:
   - 21 FTP control channel
   - 20 FTP data channel
@@ -255,6 +255,7 @@ Containers communicate using DNS names (Docker's embedded DNS):
 - Check `.env` file exists and has all required variables
 - Verify Docker daemon is running
 - Check port availability (443, 8080, 21, 20)
+- Check containers logs with `docker logs inc_XXX`
 
 ### Database connection errors
 

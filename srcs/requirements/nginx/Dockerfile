@@ -1,7 +1,7 @@
 FROM debian:bullseye
 
 # downloads
-RUN apt-get update && apt-get upgrade && apt-get install \
+RUN apt-get update && apt-get upgrade -y && apt-get install \
 	nginx openssl vim curl -y
 
 # nginx certifcate

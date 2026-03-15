@@ -7,7 +7,7 @@ if [ ! -f wp-config.php ]
 then
 	echo "Wordpress configuration\n"
 	wp core config \
-		--dbhost=mariadb:3306 \
+		--dbhost=inc_mariadb:3306 \
 		--dbname=$SQL_DATABASE \
 		--dbuser=$SQL_USER \
 		--dbpass=$SQL_PSSWD \
@@ -23,7 +23,7 @@ then
 	# redis config
 	wp config set WP_CACHE true --add --allow-root
 	wp config set WP_CAHCE_KEY_SALT $DOMAIN_NAME --allow-root
-	wp config set WP_REDIS_HOST redis --allow-root
+	wp config set WP_REDIS_HOST inc_redis --allow-root
 	wp plugin install redis-cache --activate --allow-root
 	wp plugin update --all --allow-root
 	wp redis enable --allow-root

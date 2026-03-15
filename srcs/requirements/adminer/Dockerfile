@@ -1,6 +1,6 @@
 FROM debian:bullseye
 
-RUN apt-get update && apt-get upgrade && apt-get install adminer -y
+RUN apt-get update && apt-get upgrade -y && apt-get install adminer -y
 
 
 COPY conf/000-default.conf /etc/apache2/sites-available
