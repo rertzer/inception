@@ -129,7 +129,7 @@ The project follows a microservices architecture where each service runs in its 
 4. Configures Redis for caching:
    - Installs and activates the Redis Cache plugin
    - Sets Redis as primary cache backend
-   - Points to Redis container at redis:6379
+   - Points to Redis container at `inc_redis:6379`
 5. Updates all plugins
 6. Starts PHP-FPM in foreground mode
 
