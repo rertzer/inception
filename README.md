@@ -83,7 +83,7 @@ The project follows a microservices architecture where each service runs in its 
 
 - **Container**: `inc_nginx`
 - **Port**: 443
-- **Purpose**: Reverse proxy and web server
+- **Purpose**: web server
 
 #### Features:
 
